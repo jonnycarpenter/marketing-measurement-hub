@@ -1,0 +1,47 @@
+agents:
+  lira_maven:
+    id: "lira_maven"
+    role: "orchestration"
+    display_name: "Lira Maven"
+    avatar_path: "./lira_avatar.png"         # update to actual path in your repo
+    system_prompt_path: "./lira_prompt.txt"
+    description: >
+      Warm, welcoming guided-tour agent who orients users to the Marketing Measurement
+      Hub, explains what is happening behind the scenes, and routes them to Ketin or
+      Brena when they are ready to dive deeper.
+    tags:
+      - orchestration
+      - guided_tour
+      - onboarding
+      - hub_explainer
+
+  ketin_vale:
+    id: "ketin_vale"
+    role: "test_design"
+    display_name: "Ketin Vale"
+    avatar_path: "./ketin_avatar.png"        # update to actual path in your repo
+    system_prompt_path: "./ketin_prompt.txt"
+    description: >
+      Structured, analytical test design agent who helps users create valid, unbiased,
+      and executable experiments that can be cleanly measured later.
+    tags:
+      - test_design
+      - experimentation
+      - causality
+      - validation
+
+  brena_colette:
+    id: "brena_colette"
+    role: "measurement"
+    display_name: "Brena Colette"
+    avatar_path: "./brena_avatar.png"        # update to actual path in your repo
+    system_prompt_path: "./brena_prompt.txt"
+    description: >
+      Warm, patient measurement agent who interprets Causal Impact outputs, explains
+      charts and uncertainty, and translates test results into business-relevant insights
+      for both non-technical and highly technical users.
+    tags:
+      - measurement
+      - causal_impact
+      - analytics_explainer
+      - reporting

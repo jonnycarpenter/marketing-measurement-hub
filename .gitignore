@@ -1,0 +1,86 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+
+# Environment variables
+.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Streamlit
+.streamlit/secrets.toml
+
+# Dev dependencies (vendored libraries)
+python-genai-main/
+anthropic-sdk-python-main/
+tfp-causalimpact-main/
+
+# Dev notes and documentation drafts
+*.docx
+*.xlsx
+business_impact_tab_css.md
+mhub-measurementlab-keyresults-redesign_dec62025.txt
+MMH_preamble_dec5_2025.txt
+mktg_meas_hub_open_me_text_intro.txt
+redesign_core.txt
+post_test.txt
+pre_test.txt
+synthetic_lift_test_design_TEST12022008.txt
+test_design_prompt_pre_chainofthought.txt
+tab_wrapping_withbrowser100%zoom.png
+
+# Dev helper scripts
+add_test_orders.py
+purge_tests.py
+generate_new_data.py
+update_dma_columns.py
+read_docx.py
+sql_sandbox.py
+app_styleguide.py
+
+# CI/build artifacts
+ci_docs/
+
+# Misc dev assets
+agent_persona_injection_andOL_logo/
+llms-full.txt
+mktg_measurement_logging_logic.csv
+
+# Test validation files (sample data only in repo)
+data/test_validation_files/TEST-*/
+data/test_version_history/TEST-*/
+data/test_audience_files/
+
+# ChromaDB (generated)
+knowledge_base/chroma_db/

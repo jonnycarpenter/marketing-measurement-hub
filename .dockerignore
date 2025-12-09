@@ -1,0 +1,41 @@
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Git
+.git/
+.gitignore
+
+# Environment files (secrets should be set via Cloud Run)
+.env
+
+# Local dev files
+*.log
+*.tmp
+.DS_Store
+Thumbs.db
+
+# Test/dev files not needed in production
+*.xlsx
+*.docx
+*.md
+!README.md
+tfp-causalimpact-main/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb

@@ -1,0 +1,44 @@
+# This file specifies files that are *not* uploaded to Google Cloud
+# using gcloud. It follows the same syntax as .gitignore.
+
+# Virtual environments - these are huge!
+.venv/
+venv/
+env/
+ENV/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Git
+.git/
+
+# Environment files (secrets are set via Cloud Run env vars)
+.env
+
+# Local dev files
+*.log
+*.tmp
+.DS_Store
+Thumbs.db
+
+# Large data files - these are in GCS now
+# Commenting these out since we need some data locally for Docker build
+# data/
+# knowledge_base/
+
+# Test files and session artifacts we don't need in container
+data/session_artifacts/
+data/test_version_history/
+
+# Node modules if any
+node_modules/

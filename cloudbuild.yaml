@@ -1,0 +1,53 @@
+# Cloud Build configuration for deploying to Cloud Run
+# Usage: gcloud builds submit --config cloudbuild.yaml --service-account=projects/gen-lang-client-0436975498/serviceAccounts/my-adk-agent-sa@gen-lang-client-0436975498.iam.gserviceaccount.com
+
+steps:
+  # Build the Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'us-central1-docker.pkg.dev/$PROJECT_ID/mktg-hub/mktg-measurement-hub:latest'
+      - '.'
+
+  # Push the image to Artifact Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'us-central1-docker.pkg.dev/$PROJECT_ID/mktg-hub/mktg-measurement-hub:latest'
+
+  # Deploy to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'mktg-measurement-hub'
+      - '--image'
+      - 'us-central1-docker.pkg.dev/$PROJECT_ID/mktg-hub/mktg-measurement-hub:latest'
+      - '--region'
+      - 'us-central1'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
+      - '--memory'
+      - '2Gi'
+      - '--cpu'
+      - '2'
+      - '--timeout'
+      - '300'
+      - '--service-account'
+      - 'my-adk-agent-sa@gen-lang-client-0436975498.iam.gserviceaccount.com'
+      - '--set-env-vars'
+      - 'GOOGLE_API_KEY=${_GOOGLE_API_KEY},USE_GCS=true,GCS_BUCKET_NAME=ol-measurement-hub-data,GCP_PROJECT_ID=$PROJECT_ID'
+
+images:
+  - 'us-central1-docker.pkg.dev/$PROJECT_ID/mktg-hub/mktg-measurement-hub:latest'
+
+substitutions:
+  _GOOGLE_API_KEY: ''  # Set via: --substitutions=_GOOGLE_API_KEY=your_key
+
+serviceAccount: 'projects/gen-lang-client-0436975498/serviceAccounts/my-adk-agent-sa@gen-lang-client-0436975498.iam.gserviceaccount.com'
+
+options:
+  logging: CLOUD_LOGGING_ONLY

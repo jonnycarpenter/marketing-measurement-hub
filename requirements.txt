@@ -1,0 +1,44 @@
+# Google ADK for multi-agent workflow
+google-adk[extensions]>=1.0.0
+google-genai>=1.0.0,<2.0.0
+google-generativeai>=0.8.0
+
+# Anthropic Claude models support (with Vertex AI integration)
+anthropic[vertex]>=0.43.0
+
+# Google Cloud Storage for production data
+google-cloud-storage>=2.10.0
+
+# Streamlit for the web UI
+streamlit>=1.30.0
+
+# Data processing
+pandas>=2.0.0
+numpy>=1.24.0
+
+# Causal Impact analysis (Google's TensorFlow Probability-based implementation)
+tfp-causalimpact>=0.2.0
+tf-keras>=2.20.0  # Required by tfp-causalimpact
+
+# Statistics
+scipy>=1.10.0
+
+# Visualization
+plotly>=5.18.0
+matplotlib>=3.7.0
+seaborn>=0.13.0
+
+# Utilities
+python-dotenv>=1.0.0
+pydantic>=2.0.0
+
+# Async support
+asyncio-atexit>=1.0.0
+nest-asyncio>=1.5.0
+
+# Web search and scraping
+tavily>=0.1.0
+beautifulsoup4>=4.12.0
+
+# Vector database for RAG
+chromadb>=0.4.0
