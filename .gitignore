@@ -1,3 +1,6 @@
+# Data files (stored in GCS bucket gs://ol-measurement-hub-data/)
+data/
+
 # Python
 __pycache__/
 *.py[cod]
