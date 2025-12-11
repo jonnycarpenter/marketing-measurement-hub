@@ -9,6 +9,7 @@ Agents:
 """
 
 import streamlit as st
+import streamlit.components.v1 as components
 import pandas as pd
 import numpy as np
 import plotly.express as px
@@ -110,6 +111,22 @@ st.set_page_config(
     page_icon="🏔️",
     layout="wide",
     initial_sidebar_state="expanded"
+)
+
+# Google Analytics Integration
+GA_ID = "G-83XEBCM7E1"
+
+components.html(
+    f"""
+    <script async src="https://www.googletagmanager.com/gtag/js?id={GA_ID}"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){{dataLayer.push(arguments);}}
+      gtag('js', new Date());
+      gtag('config', '{GA_ID}');
+    </script>
+    """,
+    height=0,
 )
 
 # Custom CSS - Outdoorsy Living Design System
@@ -777,9 +794,9 @@ def get_data_loader():
     """
     return DataLoader(data_dir="data")
 
-@st.cache_data
+@st.cache_data(ttl=300)
 def load_data():
-    """Load all data files."""
+    """Load all data files. Cached for 5 minutes."""
     loader = get_data_loader()
     try:
         return {
@@ -794,9 +811,9 @@ def load_data():
         return {}
 
 
-@st.cache_data
+@st.cache_data(ttl=300)
 def get_quick_stats():
-    """Calculate quick stats for display."""
+    """Calculate quick stats for display. Cached for 5 minutes."""
     loader = get_data_loader()
     try:
         sales = loader.load_sales_data()
@@ -1422,9 +1439,10 @@ def extract_test_id_from_response(response: str, user_prompt: str) -> Optional[s
     if match:
         return match.group(0)
     
-    # Try to match by test name from user prompt
+    # Try to match by test name from user prompt (uses session-scoped data)
     try:
-        tests_df = load_csv('data/master_testing_doc.csv')
+        from utils.session_data import get_session_master_doc
+        tests_df = get_session_master_doc()
         user_lower = user_prompt.lower()
         
         for _, row in tests_df.iterrows():
@@ -1733,11 +1751,14 @@ def render_data_ribbon():
         
         if st.session_state.selected_file_view == 'master':
             st.subheader("Master Test Tracker")
-            st.caption("📋 Full tracking of every test — design, execution, and measurement results")
+            st.caption("📋 Your session's test tracker — includes baseline tests plus any you create")
             try:
-                df = load_csv('data/master_testing_doc.csv')
+                # Use session-scoped data (each user sees their own sandbox)
+                from utils.session_data import get_session_master_doc
+                df = get_session_master_doc()
                 # Show ALL columns - let users see everything we track
                 st.dataframe(df, use_container_width=True, hide_index=True, height=400)
+                st.info(f"💡 This is your isolated sandbox with {len(df)} tests. Tests you create here are only visible in your session.")
             except:
                 st.info("No tests created yet.")
         
@@ -1749,9 +1770,10 @@ def render_data_ribbon():
                 st.subheader("Test Validation Files")
                 st.caption("Measurement outputs & model diagnostics")
                 
-                # Test selector dropdown
+                # Test selector dropdown (uses session-scoped data)
                 try:
-                    tests_df = load_csv('data/master_testing_doc.csv')
+                    from utils.session_data import get_session_master_doc
+                    tests_df = get_session_master_doc()
                     if not tests_df.empty and 'test_id' in tests_df.columns:
                         test_options = ["Select a test..."] + tests_df['test_id'].tolist()
                         selected_test = st.selectbox("Select Test:", test_options, key="validation_test_selector")
@@ -1794,9 +1816,10 @@ def render_data_ribbon():
                 st.subheader("Audience Files")
                 st.caption("Test & control customer lists")
                 
-                # Test selector dropdown for audience files
+                # Test selector dropdown for audience files (uses session-scoped data)
                 try:
-                    tests_df = load_csv('data/master_testing_doc.csv')
+                    from utils.session_data import get_session_master_doc
+                    tests_df = get_session_master_doc()
                     if not tests_df.empty and 'test_id' in tests_df.columns:
                         test_options = ["Select a test..."] + tests_df['test_id'].tolist()
                         selected_aud_test = st.selectbox("Select Test:", test_options, key="audience_test_selector")
@@ -2150,9 +2173,10 @@ def render_advanced_stats_workspace():
     st.markdown("#### 📊 Measurement Lab")
     st.caption("Deep-dive into measurement methodology and model diagnostics")
     
-    # Test selector dropdown - allows manual selection
+    # Test selector dropdown - allows manual selection (uses session-scoped data)
     try:
-        tests_df = load_csv('data/master_testing_doc.csv')
+        from utils.session_data import get_session_master_doc
+        tests_df = get_session_master_doc()
         if not tests_df.empty and 'test_id' in tests_df.columns:
             test_options = tests_df['test_id'].tolist()
             
@@ -2191,9 +2215,10 @@ def render_advanced_stats_workspace():
         st.warning(f"Validation files not found for {displayed_test}. Has measurement been run?")
         return
     
-    # Get test info from master doc
+    # Get test info from session-scoped master doc
     try:
-        tests_df = load_csv('data/master_testing_doc.csv')
+        from utils.session_data import get_session_master_doc
+        tests_df = get_session_master_doc()
         test_info = tests_df[tests_df['test_id'] == displayed_test].iloc[0] if not tests_df[tests_df['test_id'] == displayed_test].empty else None
     except:
         test_info = None
@@ -3116,9 +3141,10 @@ def render_business_impact_workspace():
     st.markdown("#### 💼 Summary Impact")
     st.caption("The executive summary — what you need to make a decision")
     
-    # Test selector
+    # Test selector (uses session-scoped data)
     try:
-        tests_df = load_csv('data/master_testing_doc.csv')
+        from utils.session_data import get_session_master_doc
+        tests_df = get_session_master_doc()
         if not tests_df.empty and 'test_id' in tests_df.columns:
             test_options = tests_df['test_id'].tolist()
             selected_test = st.selectbox("Select Test:", test_options, key="bi_test_selector")
